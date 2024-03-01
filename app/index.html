@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chatbot UI</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f0f0;
+        }
+
+        #chat-container {
+            max-width: 600px;
+            margin: auto;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            margin-top: 50px;
+        }
+
+        #messages {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .user-message, .bot-message {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .user-message img, .bot-message img {
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+
+        .user-message .message-content, .bot-message .message-content {
+            max-width: 70%;
+            padding: 10px;
+            border-radius: 8px;
+        }
+
+        .user-message {
+            justify-content: flex-end;
+        }
+
+        .user-message .message-content {
+            background-color: #4CAF50;
+            color: #fff;
+            align-self: flex-end;
+        }
+
+        .bot-message img {
+            width: 40px;
+            height: 40px;
+            object-fit: cover;
+        }
+
+        .bot-message .message-content {
+            background-color: #ddd;
+        }
+    </style>
+</head>
+<body>
+    <div id="chat-container">
+        <h3 style="text-align: center;">Medical ChatBot</h3>
+        <ul id="messages"></ul>
+        <form style="display: flex; width: 100%;" action="#">
+            <input type="text" id="user-input" placeholder="Type your message" style="width: 85%; box-sizing: border-box; padding: 8px;">
+            <button type="submit" onclick="sendMessage()" style="width: 15%;">Send</button>
+        </form>
+        
+    </div>
+
+    <script>
+        function appendMessage(sender, message) {
+            const messagesContainer = document.getElementById('messages');
+            const li = document.createElement('li');
+            li.className = sender === 'user' ? 'user-message' : 'bot-message';
+            const imageSize = '40px';
+            const imagePath = sender === 'user' ? 'user.png' : 'bot.png';
+
+            li.innerHTML = `
+                <img src="${imagePath}" alt="${sender} avatar" style="width: ${imageSize}; height: ${imageSize};">
+                <div class="message-content">${message}</div>
+            `;
+            messagesContainer.appendChild(li);
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        }
+
+        function sendMessage() {
+            const userInput = document.getElementById('user-input');
+            const userMessage = userInput.value.trim();
+            if (userMessage === '') return;
+
+            appendMessage('user', userMessage);
+
+            const endpoint = 'http://localhost:5000/intent'; 
+            const requestBody = {
+                // condition: 'diabetes',
+                query: userMessage
+            };
+
+            fetch(endpoint, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(requestBody),
+            })
+                .then(response => response.json())
+                .then(data => {
+                    console.log(data)
+                    const botResponse = data;
+                    appendMessage('bot', botResponse);
+                })
+                .catch(error => console.error('Error:', error));
+
+            userInput.value = '';
+        }
+    </script>
+</body>
+</html>
