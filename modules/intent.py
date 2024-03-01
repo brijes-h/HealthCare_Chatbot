@@ -22,7 +22,7 @@ class intentGPT():
         
         self.template = fetch_template('intent_identification_template')
         self.prompt = PromptTemplate(template=self.template, input_variables=["query"])
-        self.chain = LLMChain(llm=self.llm, prompt=self.prompt, verbose=True)
+        self.chain = LLMChain(llm=self.llm, prompt=self.prompt)
 
     def aiRespond(self,req: ForIntent):
             
