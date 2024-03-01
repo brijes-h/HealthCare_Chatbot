@@ -1,8 +1,8 @@
 import uvicorn
 from fastapi import FastAPI
 from models import *
-from executor import ResponseGPT, intentGPT
-
+from modules.response import ResponseGPT
+from modules.intent import intentGPT
 from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
