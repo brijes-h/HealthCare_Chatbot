@@ -2,6 +2,7 @@ from langchain.chat_models import ChatOpenAI
 from langchain.chains import LLMChain
 from langchain.prompts import PromptTemplate
 from langchain.memory import ConversationBufferWindowMemory
+from helper.fetchTemplates import fetch_template
 
 from models import *
 from templates import *
@@ -18,8 +19,9 @@ class intentGPT():
             request_timeout= 30,
             max_retries=4
         )
-
-        self.prompt = PromptTemplate(template=intent_identify_template, input_variables=["query"])
+        
+        self.template = fetch_template('intent_identification_template')
+        self.prompt = PromptTemplate(template=self.template, input_variables=["query"])
         self.chain = LLMChain(llm=self.llm, prompt=self.prompt, verbose=True)
 
     def aiRespond(self,req: ForIntent):
