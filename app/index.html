@@ -83,7 +83,7 @@
             const li = document.createElement('li');
             li.className = sender === 'user' ? 'user-message' : 'bot-message';
             const imageSize = '40px';
-            const imagePath = sender === 'user' ? 'user.png' : 'bot.png';
+            const imagePath = sender === 'user' ? '../img/user.png' : '../img/bot.png';
 
             li.innerHTML = `
                 <img src="${imagePath}" alt="${sender} avatar" style="width: ${imageSize}; height: ${imageSize};">
@@ -100,9 +100,9 @@
 
             appendMessage('user', userMessage);
 
-            const endpoint = 'http://localhost:5000/intent'; 
+            const endpoint = 'http://localhost:5000/response'; 
             const requestBody = {
-                // condition: 'diabetes',
+                condition: 'diabetes',
                 query: userMessage
             };
 
