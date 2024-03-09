@@ -1,10 +1,10 @@
 from langchain.chat_models import ChatOpenAI
 from langchain.chains import LLMChain
 from langchain.prompts import PromptTemplate
-from langchain.memory import ConversationBufferWindowMemory
-from langchain.cache import InMemoryCache
+
+from helper.fetchTemplates import fetch_template
 from models import *
-from templates import *
+# from templates import *
 import config as args
 
 class ResponseGPT():
@@ -12,14 +12,14 @@ class ResponseGPT():
     def __init__(self) -> None:
         self.llm = ChatOpenAI(
             openai_api_key= args.openai_api_key,
-            temperature= 0,
+            temperature= 0.2,
             max_tokens=150,
             request_timeout= 30,
             max_retries=4
         )
-
-        self.prompt = PromptTemplate(template=dc_template, input_variables=["query", "condition"])
-        self.memory = ConversationBufferWindowMemory(k=3)
+        
+        self.template = fetch_template('response_template')
+        self.prompt = PromptTemplate(template=self.template, input_variables=["query", "condition"])
         self.chain = LLMChain(llm=self.llm, prompt=self.prompt, verbose=True) #, memory=self.memory)
 
 

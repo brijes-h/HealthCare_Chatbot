@@ -1,11 +1,10 @@
 from langchain.chat_models import ChatOpenAI
 from langchain.chains import LLMChain
 from langchain.prompts import PromptTemplate
-from langchain.memory import ConversationBufferWindowMemory
+
 from helper.fetchTemplates import fetch_template
 
 from models import *
-from templates import *
 import config as args
     
 
