@@ -6,3 +6,7 @@ class HumanMessage(BaseModel):
 
 class ForIntent(BaseModel):
     query: str
+
+class ForRouter(BaseModel):
+    query: str
+    condition: str
